@@ -15,26 +15,37 @@ public class Usuario {
     private String senha;
     private String email;
     private String endereco;
+    private String nome;
     private boolean isAdmin;
 
-    public Usuario(int id, String login, String senha, String email, String endereco, boolean isAdmin) {
+    public Usuario(int id, String login, String senha, String email, String endereco, String nome, boolean isAdmin) {
         this.id = id;
         this.login = login;
         this.senha = senha;
         this.email = email;
         this.endereco = endereco;
+        this.nome = nome;
         this.isAdmin = isAdmin;
     }
 
-    public Usuario(String login, String senha, String email, String endereco, boolean isAdmin) {
+    public Usuario(String login, String senha, String email, String endereco, String nome, boolean isAdmin) {
         this.login = login;
         this.senha = senha;
         this.email = email;
         this.endereco = endereco;
+        this.nome = nome;
         this.isAdmin = isAdmin;
     }
 
     public Usuario() {
+    }
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public int getId() {

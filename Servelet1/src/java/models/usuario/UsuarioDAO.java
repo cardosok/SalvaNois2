@@ -8,6 +8,7 @@ package models.usuario;
 import Banco.ConnectionFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -22,21 +23,67 @@ public class UsuarioDAO {
         this.con = ConnectionFactory.getConnection();
     }
     
+    public boolean checkMatchFields(String type, String value) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM usuarios WHERE " + type + " = " + value;
+        try {
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        } catch(SQLException ex) {
+            System.err.println("Erro ao Encontrar "+ type +" igual a "+ value + ": "+ ex);
+        }
+        return false;
+    }
+    
     public boolean cadastrar (Usuario usuario){
         PreparedStatement stmt = null;
         try{
-            stmt = con.prepareStatement("INSERT INTO Usuario (login, senha, email, endereco) values(?,?,?,?)");
-            stmt.setString(1, usuario.getLogin());
-            stmt.setString(2, usuario.getSenha());
-            stmt.setString(3, usuario.getEmail());
-            stmt.setString(3, usuario.getEndereco());
-            stmt.executeUpdate();
-            return true;
+            if(checkMatchFields("login", usuario.getLogin()) && checkMatchFields("email", usuario.getEmail())){
+                stmt = con.prepareStatement("INSERT INTO usuarios (login, senha, email, endereco, nome) values( ?, ?, ?, ?, ?)");
+                stmt.setString(1, usuario.getLogin());
+                stmt.setString(2, usuario.getSenha());
+                stmt.setString(3, usuario.getEmail());
+                stmt.setString(4, usuario.getEndereco());
+                stmt.setString(5, usuario.getNome());
+                stmt.executeUpdate();
+                return true;
+            }
         } catch (SQLException ex) {
             System.err.println("Erro ao Cadastrar: "+ ex);
-            return false;
         }finally{
             ConnectionFactory.closeConnection(con, stmt);
         }
+        return false;
     }
+    
+    public Usuario login (String login, String senha){
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Usuario usuario = new Usuario();
+        try{
+            stmt = con.prepareStatement("SELECT id, nome, login, senha, email, endereco FROM usuarios WHERE login = ? and senha = ?");
+            stmt.setString(1, login);
+            stmt.setString(2, senha);
+            rs = stmt.executeQuery();
+            while(rs.next()){
+                usuario.setId(rs.getInt(1));
+                usuario.setNome(rs.getString(2));
+                usuario.setLogin(rs.getString(3));
+                usuario.setSenha(rs.getString(4));
+                usuario.setEmail(rs.getString(5));
+                usuario.setEndereco(rs.getString(6));
+            }
+            return usuario;
+        }catch(SQLException ex){
+            System.err.println("Erro ao fazer login: "+ ex);
+        }finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+        return null;
+    }
+    
 }
