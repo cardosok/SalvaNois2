@@ -93,8 +93,9 @@ public class UsuarioDAO {
                 usuario.setSenha(rs.getString(4));
                 usuario.setEmail(rs.getString(5));
                 usuario.setEndereco(rs.getString(6));
+                return usuario;
             }
-            return usuario;
+            return null;
         }catch(SQLException ex){
             System.err.println("Erro ao fazer login: "+ ex);
         }finally{
