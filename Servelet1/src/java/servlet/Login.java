@@ -13,20 +13,35 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author César
  */
-@WebServlet(name = "Login", urlPatterns = {"/Login"})
+@WebServlet(urlPatterns = {"/loginSer"}, name="loginSer")
 public class Login extends HttpServlet {
+    
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                   PrintWriter writer = response.getWriter();
+
         String Login = request.getParameter("login");
         String Senha = request.getParameter("senha");
-        Usuario usu = new Usuario();
+        UsuarioDAO dao = new UsuarioDAO();
         
+        
+        if(dao.encontraUsuarioLoginEsenha(Login,Senha)){ 
+            request.getSession().setAttribute("logado", new Boolean(true));
+            request.getSession().setAttribute("login", Login);
+            dao.login(Login, Senha);
+            System.out.println("TRansferindo");
+            response.sendRedirect("/Servelet1/login2");
+        }else{
+            response.sendRedirect("/Servelet1/html/login.html");
+        }
     }
-
+ 
 }

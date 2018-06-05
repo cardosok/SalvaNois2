@@ -26,16 +26,32 @@ public class PublicacaoDAO {
     public PublicacaoDAO() {
         this.con = ConnectionFactory.getConnection();
     }
-    
+    public int pegaId(String login){
+        int id = 0;
+       PreparedStatement stmt = null;
+       ResultSet rs = null;
+       String sql = "select id from usuario as usu where usu.login = ?";
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, login);
+            rs = stmt.executeQuery();
+            while(rs.next()){
+                id = rs.getInt("id");
+                return id;
+            }
+        } catch (Exception ex) {
+            System.err.println("Erro ao pesquisar id Publicacao: "+ ex);
+        }
+        return id;
+    }
     public boolean cadastrar (Publicacao publicacao){
         PreparedStatement stmt = null;
         try{
             if(new UsuarioDAO().checkIsAdmin(publicacao.getUsuario().getId())){
-                stmt = con.prepareStatement("INSERT INTO publicacao (imagem, video, texto, data_publicacao, usuarios_id) values( ?, ?, ?, ?, ?)");
+                stmt = con.prepareStatement("INSERT INTO publicacao (imagem, video, texto, usuarios_id) values( ?, ?, ?, ?)");
                 stmt.setString(1, publicacao.getImagem());
                 stmt.setString(2, publicacao.getVideo());
                 stmt.setString(3, publicacao.getTexto());
-                stmt.setDate(4, new java.sql.Date(Calendar.getInstance().getTimeInMillis()));
                 stmt.setInt(5, publicacao.getUsuario().getId());
                 stmt.executeUpdate();
                 return true;
@@ -51,7 +67,7 @@ public class PublicacaoDAO {
     public ArrayList<Publicacao> pesquisar (String texto) {
         ResultSet rs = null;
         PreparedStatement stmt = null;
-        String sqlQuery = "SELECT id, imagem, video, texto, data_publicacao, usuarios_id FROM publicacao WHERE texto like concat(?,'%') GROUP BY data_publicacao";
+        String sqlQuery = "SELECT id, imagem, video, texto, usuarios_id FROM publicacao WHERE texto like concat(?,'%') GROUP BY data_publicacao";
         ArrayList<Publicacao> publicacao = new ArrayList<>();
         try{
             stmt = con.prepareStatement(sqlQuery);
@@ -59,7 +75,7 @@ public class PublicacaoDAO {
             rs = stmt.executeQuery();
             while(rs.next()){
                 Usuario user = new UsuarioDAO().encontraUsuario(rs.getInt("usuarios_id"));
-                Publicacao publi = new Publicacao(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5), user);
+                Publicacao publi = new Publicacao(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), user);
             }
             return publicacao;
         }catch(SQLException ex){

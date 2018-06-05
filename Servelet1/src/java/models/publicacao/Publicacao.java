@@ -17,23 +17,20 @@ public class Publicacao {
     private String imagem;
     private String video;
     private String texto;
-    private Date dataPublicacao;
     private Usuario usuario;
 
-    public Publicacao(int id, String imagem, String video, String texto, Date dataPublicacao, Usuario usuario) {
+    public Publicacao(int id, String imagem, String video, String texto, Usuario usuario) {
         this.id = id;
         this.imagem = imagem;
         this.video = video;
         this.texto = texto;
-        this.dataPublicacao = dataPublicacao;
         this.usuario = usuario;
     }
 
-    public Publicacao(String imagem, String video, String texto, Date dataPublicacao, Usuario usuario) {
+    public Publicacao(String imagem, String video, String texto, Usuario usuario) {
         this.imagem = imagem;
         this.video = video;
         this.texto = texto;
-        this.dataPublicacao = dataPublicacao;
         this.usuario = usuario;
     }
 
@@ -72,13 +69,6 @@ public class Publicacao {
         this.texto = texto;
     }
 
-    public Date getDataPublicacao() {
-        return dataPublicacao;
-    }
-
-    public void setDataPublicacao(Date dataPublicacao) {
-        this.dataPublicacao = dataPublicacao;
-    }
 
     public Usuario getUsuario() {
         return usuario;
