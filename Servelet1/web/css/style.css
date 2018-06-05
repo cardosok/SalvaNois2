@@ -361,7 +361,7 @@ p {
         width: 90%;
     }
     .content-secondary>p,
-    .content-tertiary>p,
+    .content-tertiary>p
     {
         text-align: center;
         width: 100%;
