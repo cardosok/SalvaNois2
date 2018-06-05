@@ -19,8 +19,8 @@ import javax.servlet.http.Part;
  *
  * @author César
  */
-@WebServlet(name = "Upload", urlPatterns = {"/Upload"})
-@MultipartConfig
+/*@WebServlet(name = "Upload", urlPatterns = {"/Upload"})
+//@MultipartConfig
 public class Upload extends HttpServlet {
         private String caminhoArq = null;
     
@@ -53,7 +53,7 @@ public class Upload extends HttpServlet {
     arquivoSelecionado.write(salvarEm + File.separator + nomeArquivo);
           response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
+            
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -67,3 +67,4 @@ public class Upload extends HttpServlet {
     }
 
 }
+*/
