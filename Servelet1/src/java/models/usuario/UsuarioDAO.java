@@ -59,7 +59,7 @@ public class UsuarioDAO {
     public boolean cadastrar (Usuario usuario){
         PreparedStatement stmt = null;
         try{
-            if(checkMatchFields("login", usuario.getLogin()) && checkMatchFields("email", usuario.getEmail())){
+            if(!checkMatchFields("login", usuario.getLogin()) && !checkMatchFields("email", usuario.getEmail())){
                 stmt = con.prepareStatement("INSERT INTO usuarios (login, senha, email, endereco, nome) values( ?, ?, ?, ?, ?)");
                 stmt.setString(1, usuario.getLogin());
                 stmt.setString(2, usuario.getSenha());
@@ -128,5 +128,28 @@ public class UsuarioDAO {
         } finally{
             ConnectionFactory.closeConnection(con, stmt, rs);
         }
+    }
+    public boolean encontraUsuarioLoginEsenha(String Login,String Senha) {
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT login,senha,id FROM usuarios where login = ? and senha = ?";
+   
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setString(1, Login);
+            stmt.setString(2, Senha);
+            rs = stmt.executeQuery();
+            while(rs.next()){
+                if(rs.getString("login").equals(Login) && rs.getString("senha").equals(Senha)){
+                    return true;
+                }
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println("Erro ao pesquisar Login: "+ ex);
+            return false;
+        } 
+        return false;
     }
 }
