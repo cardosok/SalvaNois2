@@ -102,4 +102,31 @@ public class UsuarioDAO {
         }
         return null;
     }
+    
+    public Usuario encontraUsuario(int id) {
+        
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM usuarios id = ?";
+        Usuario usuario = new Usuario();
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                usuario.setId(rs.getInt(1));
+                usuario.setNome(rs.getString(2));
+                usuario.setLogin(rs.getString(3));
+                usuario.setSenha(rs.getString(4));
+                usuario.setEmail(rs.getString(5));
+                usuario.setEndereco(rs.getString(6));
+            }
+            return usuario;
+        } catch (SQLException ex) {
+            System.err.println("Erro ao pesquisar empresas: "+ ex);
+            return null;
+        } finally{
+            ConnectionFactory.closeConnection(con, stmt, rs);
+        }
+    }
 }
