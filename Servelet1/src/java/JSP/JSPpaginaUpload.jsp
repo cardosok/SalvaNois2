@@ -13,8 +13,8 @@
     </head>
     <body>
         <h1>Inserir Imagem </h1>
-        <input type="file" name="Imagem" action="JSPpaginaUpload.jsp"/>
-        <form action="./" method="POST" action="" accept-charset="utf-8">
+        <input type="file" name="Imagem" />
+        <form action="./servlet/Upload" method="POST" action="" accept-charset="utf-8">
             
             <img src="<%= request.getParameter("Imagem") %>" alt="">
 
