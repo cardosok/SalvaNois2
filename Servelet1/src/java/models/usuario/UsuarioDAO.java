@@ -39,6 +39,23 @@ public class UsuarioDAO {
         return false;
     }
     
+    public boolean checkIsAdmin(int id) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT isAdmin FROM usuarios WHERE id = ?";
+        try {
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                return rs.getBoolean(1);
+            }
+        } catch(SQLException ex) {
+            System.err.println("Erro ao encontrar usuario: "+ ex);
+        }
+        return false;
+    }
+    
     public boolean cadastrar (Usuario usuario){
         PreparedStatement stmt = null;
         try{
@@ -85,5 +102,4 @@ public class UsuarioDAO {
         }
         return null;
     }
-    
 }
